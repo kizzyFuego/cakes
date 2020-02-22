@@ -12,6 +12,7 @@ class App extends React.Component {
         <Cakes   path='/' />
         <Cake    path='/cake/:cakeID' />
         <AddCake path='/add-cake/' />
+        
       </Router>
     );
   }
