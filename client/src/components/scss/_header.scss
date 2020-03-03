@@ -1,0 +1,12 @@
+
+@keyframes ani{
+    0% { margin-left: 100%; }
+    100%{margin-left: -25%;}
+}
+
+.ratesRead{
+    padding-top: 10px;
+    animation-name: ani;
+    animation-duration: 15s;
+    animation-iteration-count: infinite;
+}

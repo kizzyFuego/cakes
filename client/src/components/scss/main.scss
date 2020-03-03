@@ -1,8 +1,6 @@
 @import "_variables.scss";
 @import "_header.scss";
 
-
-
 .header{
     .center
     {
@@ -38,14 +36,8 @@
     }
 }
 
-.ratesRead{
-    padding-top: 10px;
-    animation-name: ani;
-    animation-duration: 15s;
-    animation-iteration-count: infinite;
+.statusMessage{
+    text-align: center;
+    color: green;
 }
 
-@keyframes ani{
-    0% { margin-left: 100%; }
-    100%{margin-left: -25%;}
-}

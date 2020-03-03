@@ -7,7 +7,10 @@ import Dialog from './Dialog';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
-import Image from 'react-bootstrap/Image'
+import Image from 'react-bootstrap/Image';
+const $ = require('jquery');
+const axios = require("axios");
+
 
 
 function ModalMessage(props) {
@@ -74,7 +77,12 @@ class Exchange extends React.Component {
     render() {
         return (
             
-            <Form onSubmit={this.handleSubmit.bind(this)} className='exchange' >            
+            <Form onSubmit={this.handleSubmit.bind(this)} className='exchange' id='exchange' >            
+                
+                <div className='row'>
+                    <p className='col-12 statusMessage'>{this.state.statusMessage}</p>
+                </div>
+                
 
                 <div className='row'>
                     <div className='col-3'> </div>
@@ -82,7 +90,7 @@ class Exchange extends React.Component {
 
                         <Form.Group controlId="formFromOption">
                             <Form.Label>From</Form.Label>
-                            <Form.Control as="select" onChange={this.handleFromUpdate.bind(this)}>
+                            <Form.Control as="select" onChange={this.handleFromUpdate.bind(this)} id='from'>
                                 <option>Choose...</option>
                                 <option style={{backgroundColor : 'black'}}>Sepa Deposit</option>
                                 <option>Wire Transfer</option>
@@ -93,16 +101,16 @@ class Exchange extends React.Component {
                             <Form.Label column sm={10}>
                             Send Amount
                             </Form.Label>                 
-                            <Form.Control type="text" placeholder="" onChange={this.handleSendAmountUpdate.bind(this)} />                    
+                            <Form.Control id='sendAmount' type="text" placeholder="" onChange={this.handleSendAmountUpdate.bind(this)} />                    
                         </Form.Group>
                     </div>
                     <div className='col-3'>         
 
                         <Form.Group controlId="formToOption">
                             <Form.Label>To</Form.Label>
-                            <Form.Control as="select" onChange={this.handleToUpdate.bind(this)}>
+                            <Form.Control as="select" onChange={this.handleToUpdate.bind(this)} id='to'>
                                 <option >Choose...</option>
-                                <option><Image src='images/bitcoin_small.png' alt='' />Bitcoin</option>
+                                <option>Bitcoin</option>
                                 <option>Litcoin</option>
                             </Form.Control>
                         </Form.Group>
@@ -112,7 +120,7 @@ class Exchange extends React.Component {
                             <Form.Label column sm={10}>
                             Receive Amount
                             </Form.Label>                 
-                            <Form.Control type="text" readOnly placeholder="0" onChange={this.handleReceiveAmountUpdate.bind(this)} />                    
+                            <Form.Control id='receiveAmount' type="text" readOnly placeholder="0" onChange={this.handleReceiveAmountUpdate.bind(this)} />                    
                         </Form.Group>
                     </div>
                     <div className='col-3'> </div>
@@ -127,7 +135,7 @@ class Exchange extends React.Component {
                             <Form.Label column sm={8}>
                             Account
                             </Form.Label>                 
-                            <Form.Control type="text" placeholder="text" onChange={this.handleAccountUpdate.bind(this)} /> 
+                            <Form.Control id='account' type="text" placeholder="text" onChange={this.handleAccountUpdate.bind(this)} /> 
                                            
                         </Form.Group>
                         
@@ -157,10 +165,24 @@ class Exchange extends React.Component {
         this.setState({from: e.target.value || null});
     }
 
-    handleSendAmountUpdate(e) {
+    async handleSendAmountUpdate(e) {
         this.setState({sendAmount: e.target.value || null});
+        
 
+        const response =  await axios.get("http://localhost:3000/order/rate", {} );
+        
+        if( $('#to').val() == "Bitcoin" )
+        {
+          const rate = this.state.sendAmount * (1/response.data[0].btceur);
+          $('#receiveAmount').val(rate.toFixed(3));
+        }
+        else if ( $('#to').val() == "Litcoin" )
+        {
+          const rate = this.state.sendAmount * (1/response.data[0].ltceur);
+          $('#receiveAmount').val(rate.toFixed(2));
+        }
 
+        
     }
 
     handleToUpdate(e) {
@@ -174,36 +196,18 @@ class Exchange extends React.Component {
         this.setState({account: e.target.value || null});
     }
     
-
-    handleSubmit(e) {
-        // Prevent the default form submit action
-        e.preventDefault();
-    
-        // Perform a POST call for the new data
-        fetch(urlToCurrentDomain(`${Config.newOrderAPI}`), {
-          method : 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify( this.state ) 
-        })
-          .then (res  => {
-            if (res.status >= 400) {
-                alert('there was an error');
-                throw new Error(res.statusText);
-            }
-            return (
-                //alert('success')
-                React.render (<AlertDismissible />)
-                );
-            //return res.json();
-          })
-          .then (json => navigate(`/`))
-          .catch(err => {
-            this.setState({reportedError: err.message || 'Unknown'});
-          })
-    
-      }
+    async handleSubmit(e)
+    {
+      e.preventDefault();
+      const response =  await axios.post("http://localhost:3000/order/new", this.state );
+      this.setState({statusMessage : 'Order Placed Successfully. Order Id: '+ response.data._id} ) 
+      
+      $('#from').val('');
+      $('#to').val('');
+      $('#sendAmount').val('');
+      $('#receiveAmount').val('');
+      $('#account').val('');
+    }
 
 }
 export default Exchange;
