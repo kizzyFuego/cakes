@@ -1,7 +1,8 @@
 import React    from 'react';
 import Header from './Header';
-import Exchange from './Exchange';
+import AdminTable from './AdminTable';
 import Footer from './Footer';
+
 
 class Admin extends React.Component {
 
@@ -9,7 +10,7 @@ class Admin extends React.Component {
         return(
             <div>
                 <Header />
-                
+                <AdminTable />
                 <Footer />
             </div>
 
