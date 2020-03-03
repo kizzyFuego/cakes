@@ -1,3 +1,4 @@
 {
-  "cakesAPI": ":3000/cakes"
+  "cakesAPI": ":3000/cakes",
+  "newOrderAPI" : ":3000/order/new"
 }

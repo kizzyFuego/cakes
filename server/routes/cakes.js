@@ -2,6 +2,7 @@ const express  = require('express');
 const router   = express.Router();
 const mongoose = require('mongoose'); // using to generate ObjectIDs
 const Cake   = require('../models/Cake').Cake;
+const Order   = require('../models/Order').Order;
 
 /**
  * Functionality for this route:
@@ -78,5 +79,37 @@ router.put('/:id([0-9a-fA-F]{24})', (req, res) => {
       .json({ok: false})
     );
 });
+
+/*
+router.get('/newOrder', (req, res) => {
+  console.log("e reach here 2");
+  return new Order({
+    from     : req.body.from,
+    to       : req.body.to,
+    sendAmount : req.body.sendAmount,
+    receiveAmount : req.body.receiveAmount,
+  })
+  .save()
+  .then (order => Order.populate(order, {path: '_id'}))
+  .then (order => res.json(order))
+  .catch(err => res
+    .status(400)
+    .json({ok: false, error: err.message +" kizzo error dey"})
+  );
+});
+
+
+router.get('/hi', (req, res) => {
+  console.log("hello love");
+  return ("hello dear")
+  .save()
+  .then (order => Order.populate(order, {path: '_id'}))
+  .then (order => res.json(order))
+  .catch(err => res
+    .status(400)
+    .json({ok: false, error: err.message +" kizzo error dey"})
+  );
+});
+*/
 
   module.exports = router;
