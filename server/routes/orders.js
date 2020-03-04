@@ -8,7 +8,7 @@ const rateModel   = require('../models/Rate').Rate;
 router.get('/', (req, res) => {
   return mongoose
     .model('Order')
-    .find({}).sort({'createdAt': 'desc'}).limit(5)
+    .find({}).sort({'createdAt': 'desc'}).limit(20)
     .then (Order => res.json(Order))
     .catch(err => res
       .status(500)
@@ -43,7 +43,7 @@ router.post('/new', (req, res) => {
     .then (order => res.json(order))
     .catch(err => res
       .status(400)
-      .json({ok: false, error: err.message + " kizzo1"})
+      .json({ok: false, error: err.message })
     );
   });
 
@@ -51,34 +51,44 @@ router.post('/new', (req, res) => {
   //Update Order Send And Receive Amount
 router.put('/update', (req, res) => {
   return mongoose
-    .set('useFindAndModify', false)
-    .model('Order')
+    //.set('useFindAndModify', false)
+    .model('Order') 
     .findByIdAndUpdate(
       {'_id': req.body.id}, 
       {
         sendAmount  : req.body.sendAmount,
         receiveAmount : req.body.receiveAmount,
-        account       : req.body.account
+        account       : req.body.account,
       },
       {new: true}
     )
-    .then (Order => res.json({ok: true}))
+    .then (Order => res.json({status: true}))
     .catch(err => res
       .status(500)
-      .json({ok: false})
+      .json({status: false})
     );
 });
-
 
 //Delete Order By Id
 router.delete('/delete', (req, res) => {
   return mongoose
     .model('Order')
     .findByIdAndDelete({_id : req.body.id})
-    .then (Order => res.json({ok: true}))
+    .then (Order => res.json({status: true}))
     .catch(err => res
       .status(500)
-      .json({ok: false})
+      .json({status: false})
+    );
+});
+
+router.post('/delete', (req, res) => {
+  return mongoose
+    .model('Order')
+    .findByIdAndDelete({_id : req.body.id})
+    .then (Order => res.json({status: true}))
+    .catch(err => res
+      .status(500)
+      .json({status: false})
     );
 });
 

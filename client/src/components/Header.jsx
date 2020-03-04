@@ -1,4 +1,8 @@
 import React    from 'react';
+import Button from 'react-bootstrap/Button';
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
+import {navigate, Link}   from '@reach/router';
+
 //import $ from 'jquery';
 const $ = require('jquery');
 const axios = require("axios");
@@ -25,6 +29,13 @@ class Header extends React.Component {
   render() {
     return (
       <div className='jumbotron header'>
+        <div className='row headerButton'>
+          <ButtonToolbar>
+            <Link to='/'> <Button variant="outline-primary">Home </Button> </Link>
+            <Link to='/admin'> <Button variant="outline-primary">Admin </Button> </Link>
+            <Link to='/modifyOrder'><Button variant="outline-primary">Modify Order</Button></Link>
+          </ButtonToolbar>
+        </div>
 
         <div className='row'>
           <div className='col-12'>

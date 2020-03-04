@@ -10,59 +10,6 @@ import Alert from 'react-bootstrap/Alert';
 import Image from 'react-bootstrap/Image';
 const $ = require('jquery');
 const axios = require("axios");
-
-
-
-function ModalMessage(props) {
-    const [show, setShow] = React.useState(true);
-  
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-  
-    return (
-      <>
-        {/*<Button variant="primary" onClick={handleShow}>
-          Launch demo modal
-        </Button>*/}
-  
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>{props.title}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>{props.body}}</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </>
-    );
-  }
-
-
-  function AlertDismissible() {
-    const [show, setShow] = React.useState(true);
-  
-    return (
-      <>
-        <Alert show={show} variant="success">
-          <Alert.Heading>How's it going?!</Alert.Heading>
-          <p>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget
-            lacinia odio sem nec elit. Cras mattis consectetur purus sit amet
-            fermentum.
-          </p>
-          <hr />
-          <div className="d-flex justify-content-end">
-            <Button onClick={() => setShow(false)} variant="outline-success">
-              Close me ya'll!
-            </Button>
-          </div>
-        </Alert>
-      </>
-    );
-  }
   
 
 class Exchange extends React.Component {
@@ -120,7 +67,7 @@ class Exchange extends React.Component {
                             <Form.Label column sm={10}>
                             Receive Amount
                             </Form.Label>                 
-                            <Form.Control id='receiveAmount' type="text" readOnly placeholder="0" onChange={this.handleReceiveAmountUpdate.bind(this)} />                    
+                            <Form.Control id='receiveAmount' type="text" value={this.state.receiveAmount} readOnly placeholder="0" onChange={this.handleReceiveAmountUpdate.bind(this)} />                    
                         </Form.Group>
                     </div>
                     <div className='col-3'> </div>
@@ -174,12 +121,14 @@ class Exchange extends React.Component {
         if( $('#to').val() == "Bitcoin" )
         {
           const rate = this.state.sendAmount * (1/response.data[0].btceur);
-          $('#receiveAmount').val(rate.toFixed(3));
+          this.setState({receiveAmount: rate.toFixed(3)});
+          //$('#receiveAmount').val(rate.toFixed(3));
         }
         else if ( $('#to').val() == "Litcoin" )
         {
           const rate = this.state.sendAmount * (1/response.data[0].ltceur);
-          $('#receiveAmount').val(rate.toFixed(2));
+          //$('#receiveAmount').val(rate.toFixed(2));
+          this.setState({receiveAmount: rate.toFixed(2)});
         }
 
         

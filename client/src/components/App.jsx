@@ -3,6 +3,7 @@ import {Router} from "@reach/router";
 import  "./scss/main.scss";
 import Home from './Home';
 import Admin from './Admin';
+import ModifyOrder from './ModifyOrder';
 
 class App extends React.Component {
 
@@ -12,6 +13,7 @@ class App extends React.Component {
         <Router>   
           <Home path='/' /> 
           <Admin path='/admin/' />
+          <ModifyOrder path='/modifyOrder' />
         </Router>    
       </div>
     );
