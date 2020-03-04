@@ -1,17 +1,9 @@
 import React from 'react';
-import * as Config        from '../config.json';
-import {navigate, Link}   from '@reach/router';
-import urlToCurrentDomain from '../lib/urlToCurrentDomain';
 import Form from 'react-bootstrap/Form';
-import Dialog from './Dialog';
-import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert';
-import Image from 'react-bootstrap/Image';
 const $ = require('jquery');
 const axios = require("axios");
   
-
 class Exchange extends React.Component {
     
     state = {
